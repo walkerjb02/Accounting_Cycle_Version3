@@ -1,0 +1,16 @@
+Date,Debit,Credit,Debit($),Credit($)
+11/23/2021,,,,,
+,cash,,1000,,
+,factory equipment,,1000,,
+,,stock,,2000,
+,,,,,_
+11/24/2021,,,,,
+,wage expense,,50,,
+,utilities expense,,100,,
+,,cash,,150,
+,,,,,_
+11/26/2021,,,,,
+,ar,,500,,
+,cash,,100,,
+,,services revenue,,600,
+,,,,,_
