@@ -8,8 +8,8 @@ class server:
         self.serverSocket.bind(('', 0))
         self.serverIP = '10.0.0.46'
         self.serverPort = self.serverSocket.getsockname()[1]
-        print("serverIP:\t" + self.serverIP)
-        print("serverPort:\t" + str(self.serverPort))
+        print(f"serverIP:{self.serverIP}")
+        print(f"serverPort:{str(self.serverPort)}")
         self.clientportmessage = []
         self.message = str(self.serverPort)
         self.clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
