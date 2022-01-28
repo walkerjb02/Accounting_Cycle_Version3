@@ -1,11 +1,22 @@
 import webbrowser as wb
 from Storage import jour
 class Main():
+    def startup(self):
+        while 1:
+            check, menu = input('What would you like to do?\n'), {'journal': 'Main().journal()',
+                                                                  'trial balance': 'Main().TrialBalance()',
+                                                                  'income': 'Main().IncomeAndRetainedEarnings()',
+                                                                  'balance': 'Main().BalanceSheet()',
+                                                                  'cash': 'Main().CashFlowsStatement()'}
+            for i in menu.keys():
+                if check in i:
+                    print(exec(menu[check]))
     def journal(self):
         with open('Journal.csv', 'a') as journalfile:
-            journalfile.write(f'{input("""Date? """)}\n\n\n')
+            journalfile.write(f'{input("""Date?""")}\n\n\n')
             done = False
             while done == False:
+                journal = jour
                 category, cattitle, amount = input('Debit or Credit?\n').lower(), input('Category name?\n').lower(), int(input('How much in this category?\n'))
                 if 'debit' in category:
                     journalfile.write(f'{cattitle},,,{str(amount)}\n')
@@ -13,12 +24,14 @@ class Main():
                 else:
                     modified = cattitle.replace(cattitle, 'c' + cattitle)
                     journalfile.write(f',{cattitle},,,{str(amount)}\n')
-                jour[modified] = amount
-                for i in jour.keys():
+                for i in journal.keys():
                     if i in modified:
-                        jour[i] = jour[i] + amount
+                        journal[i] = journal[i] + amount
+                    else: journal[modified] = amount
                 check = input('Done?\n').lower()
                 if not 'no' in check:
+                    with open('Storage.py', 'w') as storage:
+                        storage.writelines(f'jour = {journal}\n')
                     done = True
                     wb.open('Journal.csv')
     def TrialBalance(self):
@@ -37,6 +50,13 @@ class Main():
             else:
                 print('Categories Do Not Balance -- Creating TB Chart!')
                 wb.open('Trial_Balance.csv')
+    def adjusting_entries(self):
+        adjcheck = input('Adj entries y/n?\n').lower()
+        if 'y' in adjcheck:
+            print(Main().journal())
+            print(Main().TrialBalance())
+        else:
+            pass
     def IncomeAndRetainedEarnings(self):
         with open('Income_Statement.csv', 'a') as IncomeFile:
             pass
@@ -48,3 +68,4 @@ class Main():
     def CashFlowsStatement(self):
         with open('Cash_Flows.csv', 'a') as CashFile:
             pass
+Main().startup()
