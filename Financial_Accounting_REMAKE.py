@@ -14,8 +14,7 @@ class Main():
     def journal(self):
         with open('Journal.csv', 'a') as journalfile:
             journalfile.write(f'{input("""Date?""")}\n\n\n')
-            done = False
-            while done == False:
+            while not done:
                 journal = jour
                 category, cattitle, amount = input('Debit or Credit?\n').lower(), input('Category name?\n').lower(), int(input('How much in this category?\n'))
                 if 'debit' in category:
@@ -55,17 +54,35 @@ class Main():
         if 'y' in adjcheck:
             print(Main().journal())
             print(Main().TrialBalance())
-        else:
-            pass
-    def IncomeAndRetainedEarnings(self):
-        with open('Income_Statement.csv', 'a') as IncomeFile:
-            pass
-        with open('Retained_Earnings.csv', 'a') as Retfile:
-            pass
-    def BalanceSheet(self):
-        with open('Balance_Sheet.csv', 'a') as BalanceFile:
-            pass
-    def CashFlowsStatement(self):
-        with open('Cash_Flows.csv', 'a') as CashFile:
-            pass
+        else: pass
+                
+    def Statements(self):
+        acctgcycle = ['Income_Statement.csv', 'Retained_Earnings.csv', 'Balance_Sheet.csv', 'Cash_Flows.csv']
+        for a in acctgcycle:
+            with open(f'{a}', 'w') as Statement:
+                companyname, revenues, expenses, revenueamounts, expenseamounts, dividends = input('Insert Company Name Here: '), [
+                    i[1::] for i in jour.keys() if
+                    'revenue' in i or 'sales' in i or 'profit' in i or 'operating' in i], [j[1::] for j in jour.keys() if
+                                                                                           'taxes' in j or 'expense' in j or 'cost' in j], [
+                                                                                      jour[i] for i in jour.keys() if
+                                                                                      'revenue' in i or 'sales' in i or 'profit' in i or 'operating' in i], [
+                                                                                      jour[j] for j in jour.keys() if
+                                                                                      'taxes' in j or 'expense' in j or 'cost' in j], [sum(jour[i]) for i in jour.keys() if 'dividend' in jour.keys()]
+                net = sum(revenueamounts) - sum(expenseamounts)
+                if 'Income_Statement.csv' in a:
+                    Statement.write(f"""Consolidated Income Statement for {companyname}\n\n\n Revenues\n""")
+                    for b, c in revenues, revenueamounts:
+                        Statement.write(f'{b},,,{c}\n')
+                    Statement.write('Expenses\n')
+                    for e, f in expenses, expenseamounts:
+                        Statement.write(f',{e},,{f}\n')
+                    Statement.write(f'Net Income:,,,{net}')
+                elif 'Retained_Earnings.csv' in a:
+                    Statement.write(f"""Statement of Retained Earnings for {companyname}\n\n\n Net Income,,,{net}\n{}""")
+                elif 'Balance_Sheet.csv' in a:
+                    pass
+                else:
+                    pass
+                break
+            
 Main().startup()
